@@ -1,10 +1,23 @@
 import os
-import sys
+from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, url_for
+import pykakasi
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+
+
+class Kakashi:
+    kakashi = pykakasi.kakasi()
+    kakashi.setMode("H", "a")
+    kakashi.setMode("K", "a")
+    kakashi.setMode("J", "a")
+    conv = kakashi.getConverter()
+
+    @classmethod
+    def japanese_to_ascii(cls, japanese):
+        return cls.conv.do(japanese)
 
 
 class UserInfo:
@@ -49,8 +62,8 @@ def upload():
         return render_template("upload.html")
     elif request.method == "POST":
         file = request.files["file"]
-        save_filename = secure_filename(file.filename)
-        from pathlib import Path
+        ascii_name = Kakashi.japanese_to_ascii(file.filename)
+        save_filename = secure_filename(ascii_name)
 
         base_dir = Path(__file__).resolve().parent  # app.pyのいるディレクトリを指します
         save_file_full_path = os.path.join(
