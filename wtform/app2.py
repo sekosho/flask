@@ -10,6 +10,7 @@ from wtforms import (
     PasswordField,
     DateField,
     SubmitField,
+    ValidationError,
 )
 
 app = Flask(__name__)
@@ -29,6 +30,10 @@ class UserForm(Form):
     is_japanese = BooleanField("日本人？: ")
     message = TextAreaField("メッセージ: ")
     submit = SubmitField("送信")
+
+    def validate_password(self, field):
+        if field.data == "087233ee":
+            raise ValidationError("そのパスワードは使用できません")
 
 
 @app.route("/", methods=["GET", "POST"])
