@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from wtforms import StringField, SubmitField, IntegerField
 from wtforms.form import Form
 
+
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = b"\xda\xa4\xb5\x1f`J\x0bX\xea\xf3]\xcb\xa9xzY"
@@ -29,4 +30,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
