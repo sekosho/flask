@@ -25,6 +25,6 @@ def show_user(user_name, user_id):
     user_name_id = user_id + user_name
     return "<h1>{}</h1>".format(user_name_id)
 
-
+# 衝突おきるのか
 if __name__ == "__main__":
     app.run(debug=True)
