@@ -2,7 +2,6 @@ from flask import Flask
 
 app = Flask(__name__)
 
-# ぶつかれー
 @app.route("/")
 def index():
     return "<h1>Hello World</h1>"
@@ -25,6 +24,6 @@ def show_user(user_name, user_id):
     user_name_id = user_id + user_name
     return "<h1>{}</h1>".format(user_name_id)
 
-# 衝突おきるのか
+
 if __name__ == "__main__":
     app.run(debug=True)
