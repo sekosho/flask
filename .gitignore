@@ -10,3 +10,5 @@ migrations
 *.sqlite
 # form/static/image
 form/static/image
+# sns_application/flaskr/static/user_image
+sns_application/flaskr/static/user_image/*.jpg
