@@ -4,6 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from .config.settings import DevelopmentConfig, ProductionConfig
 
 login_manager = LoginManager()  # Flask-Loginライブラリとアプリケーションをつなぐ
 # ログインの関数
@@ -12,22 +13,34 @@ login_manager.login_view = "app.login"
 login_manager.login_message = "ログインしてください"
 
 
-dir_path = os.path.dirname(__file__)
-print(dir_path)
-basedir = os.path.normpath(os.path.join(dir_path, ".."))
-print(basedir)
+# dir_path = os.path.dirname(__file__)
+# print(dir_path)
+# basedir = os.path.normpath(os.path.join(dir_path, ".."))
+# print(basedir)
 db = SQLAlchemy()
 migrate = Migrate()
+
+config = {
+    "development": "config/development/settings.cfg",
+    "production": "config/production/settings.cfg",
+}
+config_class = {
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+}
 
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "mysite"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-        basedir, "data.sqlite"
-    )
-    print("sqlite:///" + os.path.join(basedir, "data.sqlite"))
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    config_file = config[os.getenv("ENVIRONMENT", "development")]
+    app.config.from_pyfile(config_file)
+    print(f"config_file = {config_file}")
+    # app.config.from_envvar("FLASK_CONFIG_ENV")
+
+    # クラスから読み込む
+    config_target = config_class[os.getenv("ENVIRONMENT", "development")]
+    app.config.from_object(config_target)
+
     from flaskr.views import bp
 
     app.register_blueprint(bp)
